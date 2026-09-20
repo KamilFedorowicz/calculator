@@ -1,13 +1,102 @@
 #include <QApplication>
 #include <QPushButton>
+#include <QTextEdit>
+#include <QWidget>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <vector>
+#include <iostream>
+#include <QDebug>
+
+void numberPressed(QTextEdit *display, const QString num)
+{
+    display->insertPlainText(num);
+}
+
+/*
+void delPressed(QTextEdit *display)
+{
+    QString text = display->toPlainText();
+    
+    std::cout << text << std::endl;
+}
+ */
+
 
 int main(int argc, char *argv[]) // start executing the code
 {
 
     QApplication app(argc, argv);
+    qDebug() << "Application started";
 
+    QWidget* window = new QWidget;
+    window->setWindowTitle("Calculator");
+    window->resize(800, 600);
+
+    // buttons
+    QPushButton *btn1 = new QPushButton("But 1");
+    QPushButton *btn2 = new QPushButton("But 2");
+    QPushButton *btn3 = new QPushButton("But 3");
+    QPushButton *btn4 = new QPushButton("But 4");
+    QPushButton *btn5 = new QPushButton("But 5");
+    QPushButton *btn6 = new QPushButton("But 6");
+    QPushButton *btn7 = new QPushButton("But 7");
+    QPushButton *btn8 = new QPushButton("But 8");
+    QPushButton *btn9 = new QPushButton("But 9");
+    QPushButton *big = new QPushButton("Big");
+    QPushButton *del = new QPushButton("del");
+    
+    // buttons vector
+    std::vector<QPushButton*> buttons;
+    buttons.push_back(btn1);
+    buttons.push_back(btn2);
+    buttons.push_back(btn3);
+    buttons.push_back(btn4);
+    buttons.push_back(btn5);
+    buttons.push_back(btn6);
+    buttons.push_back(btn7);
+    buttons.push_back(btn8);
+    buttons.push_back(btn9);
+    buttons.push_back(del);
+    
+    for(QPushButton* btn: buttons)
+    {
+        btn->setMinimumHeight(100);
+    }
+    //big->setMinimumHeight(100);
+    
+    // display
+    QTextEdit *display = new QTextEdit;
+    display->setReadOnly(true);
+    
+    QGridLayout *layout = new QGridLayout;
+    
+    int numStartRow = 1;
+    int numStartCol = 0;
+    
+    layout->addWidget(btn7, numStartRow, numStartCol); // widget, row, column
+    layout->addWidget(btn8, numStartRow, numStartCol+1);
+    layout->addWidget(btn9, numStartRow, numStartCol+2);
+    layout->addWidget(btn4, numStartRow+1, numStartCol);
+    layout->addWidget(btn5, numStartRow+1, numStartCol+1);
+    layout->addWidget(btn6, numStartRow+1, numStartCol+2);
+    layout->addWidget(btn1, numStartRow+2, numStartCol);
+    layout->addWidget(btn2, numStartRow+2, numStartCol+1);
+    layout->addWidget(btn3, numStartRow+2, numStartCol+2);
+    layout->addWidget(display, 0, 0, 1, 3);
+    
+    QObject::connect(btn1, &QPushButton::clicked, [display](){numberPressed(display, "1");});
+    
+
+    
+    window->setLayout(layout);
+    
+    window->show();
+    
+    /*
     QWidget window;
     window.resize(400, 300);
+    window.setWindowTitle("Calculator window");
     
     QPushButton button1("Hello Qt4!", &window);
     button1.move(50, 50);
@@ -17,9 +106,10 @@ int main(int argc, char *argv[]) // start executing the code
     QPushButton button2("Hello Qt5!", &window);
     button2.move(200, 50);
     button2.resize(100, 40);
-
     
+    QTestEdit display;
     window.show();
+    */
 
     return app.exec();
 }
