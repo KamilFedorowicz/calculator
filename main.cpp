@@ -43,6 +43,7 @@ int main(int argc, char *argv[]) // start executing the code
     QPushButton *btn7 = new QPushButton("But 7");
     QPushButton *btn8 = new QPushButton("But 8");
     QPushButton *btn9 = new QPushButton("But 9");
+    QPushButton *btn0 = new QPushButton("But 0");
     QPushButton *big = new QPushButton("Big");
     QPushButton *del = new QPushButton("del");
     
@@ -57,6 +58,7 @@ int main(int argc, char *argv[]) // start executing the code
     buttons.push_back(btn7);
     buttons.push_back(btn8);
     buttons.push_back(btn9);
+    buttons.push_back(btn0);
     buttons.push_back(del);
     
     for(QPushButton* btn: buttons)
@@ -71,7 +73,7 @@ int main(int argc, char *argv[]) // start executing the code
     
     QGridLayout *layout = new QGridLayout;
     
-    int numStartRow = 1;
+    int numStartRow = 2;
     int numStartCol = 0;
     
     layout->addWidget(btn7, numStartRow, numStartCol); // widget, row, column
@@ -83,9 +85,19 @@ int main(int argc, char *argv[]) // start executing the code
     layout->addWidget(btn1, numStartRow+2, numStartCol);
     layout->addWidget(btn2, numStartRow+2, numStartCol+1);
     layout->addWidget(btn3, numStartRow+2, numStartCol+2);
+    layout->addWidget(btn0, numStartRow+3, numStartCol+1);
+    layout->addWidget(del, 1, 0);
     layout->addWidget(display, 0, 0, 1, 3);
     
     QObject::connect(btn1, &QPushButton::clicked, [display](){numberPressed(display, "1");});
+    QObject::connect(btn2, &QPushButton::clicked, [display](){numberPressed(display, "2");});
+    QObject::connect(btn3, &QPushButton::clicked, [display](){numberPressed(display, "3");});
+    QObject::connect(btn4, &QPushButton::clicked, [display](){numberPressed(display, "4");});
+    QObject::connect(btn5, &QPushButton::clicked, [display](){numberPressed(display, "5");});
+    QObject::connect(btn6, &QPushButton::clicked, [display](){numberPressed(display, "6");});
+    QObject::connect(btn7, &QPushButton::clicked, [display](){numberPressed(display, "7");});
+    QObject::connect(btn8, &QPushButton::clicked, [display](){numberPressed(display, "8");});
+    QObject::connect(btn9, &QPushButton::clicked, [display](){numberPressed(display, "9");});
     
 
     
