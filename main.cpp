@@ -7,20 +7,9 @@
 #include <vector>
 #include <iostream>
 #include <QDebug>
+#include "DisplayHelpers.cpp"
 
-void numberPressed(QTextEdit *display, const QString num)
-{
-    display->insertPlainText(num);
-}
 
-/*
-void delPressed(QTextEdit *display)
-{
-    QString text = display->toPlainText();
-    
-    std::cout << text << std::endl;
-}
- */
 
 
 int main(int argc, char *argv[]) // start executing the code
@@ -46,6 +35,7 @@ int main(int argc, char *argv[]) // start executing the code
     QPushButton *btn0 = new QPushButton("But 0");
     QPushButton *big = new QPushButton("Big");
     QPushButton *del = new QPushButton("del");
+    QPushButton *dot = new QPushButton("But .");
     
     // buttons vector
     std::vector<QPushButton*> buttons;
@@ -60,6 +50,7 @@ int main(int argc, char *argv[]) // start executing the code
     buttons.push_back(btn9);
     buttons.push_back(btn0);
     buttons.push_back(del);
+    buttons.push_back(dot);
     
     for(QPushButton* btn: buttons)
     {
@@ -86,6 +77,7 @@ int main(int argc, char *argv[]) // start executing the code
     layout->addWidget(btn2, numStartRow+2, numStartCol+1);
     layout->addWidget(btn3, numStartRow+2, numStartCol+2);
     layout->addWidget(btn0, numStartRow+3, numStartCol+1);
+    layout->addWidget(dot, numStartRow+3, numStartCol+2);
     layout->addWidget(del, 1, 0);
     layout->addWidget(display, 0, 0, 1, 3);
     
@@ -98,7 +90,9 @@ int main(int argc, char *argv[]) // start executing the code
     QObject::connect(btn7, &QPushButton::clicked, [display](){numberPressed(display, "7");});
     QObject::connect(btn8, &QPushButton::clicked, [display](){numberPressed(display, "8");});
     QObject::connect(btn9, &QPushButton::clicked, [display](){numberPressed(display, "9");});
-    
+    QObject::connect(btn0, &QPushButton::clicked, [display](){numberPressed(display, "0");});
+    QObject::connect(dot, &QPushButton::clicked, [display](){dotPressed(display);});
+    QObject::connect(del, &QPushButton::clicked, [display](){delPressed(display);});
 
     
     window->setLayout(layout);
