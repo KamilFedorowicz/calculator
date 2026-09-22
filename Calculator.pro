@@ -2,7 +2,7 @@ QT += widgets
 
 SOURCES +=\
 	 main.cpp\
-	DisplayHelpers.cpp
+	calculatorengine.cpp
 
 HEADERS += \
-	DisplayHelpers.h
+	calculatorengine.h

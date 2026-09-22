@@ -7,7 +7,7 @@
 #include <vector>
 #include <iostream>
 #include <QDebug>
-#include "DisplayHelpers.cpp"
+#include "calculatorengine.h"
 
 
 
@@ -21,8 +21,16 @@ int main(int argc, char *argv[]) // start executing the code
     QWidget* window = new QWidget;
     window->setWindowTitle("Calculator");
     window->resize(800, 600);
+    
+    CalculatorEngine engine;
+    
+    // display
+    QTextEdit *display = new QTextEdit;
+    display->setReadOnly(true);
+    display->setPlainText(engine.getDisplayText());
+    display->setMinimumHeight(100);
 
-    // buttons
+    // Number buttons
     QPushButton *btn1 = new QPushButton("But 1");
     QPushButton *btn2 = new QPushButton("But 2");
     QPushButton *btn3 = new QPushButton("But 3");
@@ -33,39 +41,42 @@ int main(int argc, char *argv[]) // start executing the code
     QPushButton *btn8 = new QPushButton("But 8");
     QPushButton *btn9 = new QPushButton("But 9");
     QPushButton *btn0 = new QPushButton("But 0");
-    QPushButton *big = new QPushButton("Big");
+    
     QPushButton *del = new QPushButton("del");
     QPushButton *dot = new QPushButton("But .");
+    QPushButton *clear = new QPushButton("C");
     
     // buttons vector
-    std::vector<QPushButton*> buttons;
-    buttons.push_back(btn1);
-    buttons.push_back(btn2);
-    buttons.push_back(btn3);
-    buttons.push_back(btn4);
-    buttons.push_back(btn5);
-    buttons.push_back(btn6);
-    buttons.push_back(btn7);
-    buttons.push_back(btn8);
-    buttons.push_back(btn9);
-    buttons.push_back(btn0);
-    buttons.push_back(del);
-    buttons.push_back(dot);
+    std::vector<QPushButton *> numberButtons = {
+    btn0,
+    btn1,
+    btn2,
+    btn3,
+    btn4,
+    btn5,
+    btn6,
+    btn7,
+    btn8,
+    btn9
+    };
     
-    for(QPushButton* btn: buttons)
+    for(QPushButton* btn: numberButtons)
     {
         btn->setMinimumHeight(100);
     }
-    //big->setMinimumHeight(100);
-    
-    // display
-    QTextEdit *display = new QTextEdit;
-    display->setReadOnly(true);
+    dot->setMinimumHeight(100);
+    del->setMinimumHeight(100);
+    clear->setMinimumHeight(100);
     
     QGridLayout *layout = new QGridLayout;
     
     int numStartRow = 2;
     int numStartCol = 0;
+    
+    layout->addWidget(display, 0, 0, 1, 3);
+    layout->addWidget(del, 1, 0);
+    layout->addWidget(dot, numStartRow+3, numStartCol+2);
+    layout->addWidget(clear, numStartRow+3, numStartCol+0);
     
     layout->addWidget(btn7, numStartRow, numStartCol); // widget, row, column
     layout->addWidget(btn8, numStartRow, numStartCol+1);
@@ -77,45 +88,152 @@ int main(int argc, char *argv[]) // start executing the code
     layout->addWidget(btn2, numStartRow+2, numStartCol+1);
     layout->addWidget(btn3, numStartRow+2, numStartCol+2);
     layout->addWidget(btn0, numStartRow+3, numStartCol+1);
-    layout->addWidget(dot, numStartRow+3, numStartCol+2);
-    layout->addWidget(del, 1, 0);
-    layout->addWidget(display, 0, 0, 1, 3);
+
+    // Refreshes the GUI from the calculator engine.
+    auto refreshDisplay = [&engine, display]()
+    {
+    display->setPlainText(engine.getDisplayText());
+    };
     
-    QObject::connect(btn1, &QPushButton::clicked, [display](){numberPressed(display, "1");});
-    QObject::connect(btn2, &QPushButton::clicked, [display](){numberPressed(display, "2");});
-    QObject::connect(btn3, &QPushButton::clicked, [display](){numberPressed(display, "3");});
-    QObject::connect(btn4, &QPushButton::clicked, [display](){numberPressed(display, "4");});
-    QObject::connect(btn5, &QPushButton::clicked, [display](){numberPressed(display, "5");});
-    QObject::connect(btn6, &QPushButton::clicked, [display](){numberPressed(display, "6");});
-    QObject::connect(btn7, &QPushButton::clicked, [display](){numberPressed(display, "7");});
-    QObject::connect(btn8, &QPushButton::clicked, [display](){numberPressed(display, "8");});
-    QObject::connect(btn9, &QPushButton::clicked, [display](){numberPressed(display, "9");});
-    QObject::connect(btn0, &QPushButton::clicked, [display](){numberPressed(display, "0");});
-    QObject::connect(dot, &QPushButton::clicked, [display](){dotPressed(display);});
-    QObject::connect(del, &QPushButton::clicked, [display](){delPressed(display);});
+    
+    QObject::connect(
+        btn1,
+        &QPushButton::clicked,
+        [&engine, refreshDisplay]()
+        {
+            engine.appendNumber("1");
+            refreshDisplay();
+        }
+    );
+    
+    QObject::connect(
+        btn2,
+        &QPushButton::clicked,
+        [&engine, refreshDisplay]()
+        {
+            engine.appendNumber("2");
+            refreshDisplay();
+        }
+    );
+    
+    QObject::connect(
+        btn3,
+        &QPushButton::clicked,
+        [&engine, refreshDisplay]()
+        {
+            engine.appendNumber("3");
+            refreshDisplay();
+        }
+    );
+    
+    QObject::connect(
+        btn4,
+        &QPushButton::clicked,
+        [&engine, refreshDisplay]()
+        {
+            engine.appendNumber("4");
+            refreshDisplay();
+        }
+    );
+    
+    QObject::connect(
+        btn5,
+        &QPushButton::clicked,
+        [&engine, refreshDisplay]()
+        {
+            engine.appendNumber("5");
+            refreshDisplay();
+        }
+    );
+    
+    QObject::connect(
+        btn6,
+        &QPushButton::clicked,
+        [&engine, refreshDisplay]()
+        {
+            engine.appendNumber("6");
+            refreshDisplay();
+        }
+    );
+    
+    QObject::connect(
+        btn7,
+        &QPushButton::clicked,
+        [&engine, refreshDisplay]()
+        {
+            engine.appendNumber("7");
+            refreshDisplay();
+        }
+    );
+    
+    QObject::connect(
+        btn8,
+        &QPushButton::clicked,
+        [&engine, refreshDisplay]()
+        {
+            engine.appendNumber("8");
+            refreshDisplay();
+        }
+    );
+
+    QObject::connect(
+        btn9,
+        &QPushButton::clicked,
+        [&engine, refreshDisplay]()
+        {
+            engine.appendNumber("9");
+            refreshDisplay();
+        }
+    );
+    
+    QObject::connect(
+        btn0,
+        &QPushButton::clicked,
+        [&engine, refreshDisplay]()
+        {
+            engine.appendNumber("0");
+            refreshDisplay();
+        }
+    );
+    
+    // need to do tomorrow
+    /*
+    QObject::connect(
+        dot,
+        &QPushButton::clicked,
+        [&engine, refreshDisplay]()
+        {
+            engine.appendDecimalPoint();
+            refreshDisplay();
+        }
+    );
+     */
+    
+    QObject::connect(
+        del,
+        &QPushButton::clicked,
+        [&engine, refreshDisplay]()
+        {
+            engine.backspace();
+            refreshDisplay();
+        }
+    );
+    
+    QObject::connect(
+        clear,
+        &QPushButton::clicked,
+        [&engine, refreshDisplay]()
+        {
+            engine.clear();
+            refreshDisplay();
+        }
+    );
 
     
     window->setLayout(layout);
     
     window->show();
-    
-    /*
-    QWidget window;
-    window.resize(400, 300);
-    window.setWindowTitle("Calculator window");
-    
-    QPushButton button1("Hello Qt4!", &window);
-    button1.move(50, 50);
-    button1.resize(100, 40);
 
-    
-    QPushButton button2("Hello Qt5!", &window);
-    button2.move(200, 50);
-    button2.resize(100, 40);
-    
-    QTestEdit display;
-    window.show();
-    */
 
     return app.exec();
 }
