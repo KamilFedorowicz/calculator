@@ -9,14 +9,16 @@ public:
     void appendNumber(const QString& num);
     void appendSign(const QString& sign);
     void appendDecimalPoint();
+    void evaluateExpression();
     void backspace();
     void clear();
     void checkIfZero();
     bool isSign(const QString& sign);
     void addBracket(const QString& bracket);
+    double evaluate(const std::string& expression_string);
 
-    QString getDisplayText() const;
-    QString displayText{"0"};
+    QString getCurrentExpression() const;
+    QString currentExpression{"0"};
 
 private:
     

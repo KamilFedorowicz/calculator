@@ -1,12 +1,38 @@
 #include "calculatorengine.h"
+#include "exprtk.hpp"
+
+void CalculatorEngine::evaluateExpression()
+{
+    double result = evaluate(currentExpression.toStdString());
+    QString currentInput = QString::number(result);
+    currentExpression = currentInput;
+}
+
+
+double CalculatorEngine::evaluate(const std::string& expression_string)
+{
+    typedef exprtk::expression<double> expression_t;
+    typedef exprtk::parser<double> parser_t;
+
+    expression_t expression;
+    parser_t parser;
+
+    if (!parser.compile(expression_string, expression))
+    {
+        return 0.0;
+        throw std::runtime_error("Invalid expression");
+    }
+
+    return expression.value();
+}
 
 void CalculatorEngine::appendNumber(const QString& num)
 {
-    if(displayText == "0")
+    if(currentExpression == "0")
     {
-        displayText.chop(1);
+        currentExpression.chop(1);
     }
-    displayText += num;
+    currentExpression += num;
 }
 
 bool CalculatorEngine::isSign(const QString& sign)
@@ -21,22 +47,22 @@ bool CalculatorEngine::isSign(const QString& sign)
 
 void CalculatorEngine::addBracket(const QString& bracket)
 {
-    displayText += bracket;
+    currentExpression += bracket;
 }
 
 void CalculatorEngine::appendSign(const QString& sign)
 {
-    QChar lastChar = displayText.back();
+    QChar lastChar = currentExpression.back();
     if(isSign(lastChar))
     {
-        displayText.chop(1);
+        currentExpression.chop(1);
     }
-    displayText += sign;
+    currentExpression += sign;
 }
 
 void CalculatorEngine::appendDecimalPoint()
 {
-    for(QChar c: displayText)
+    for(QChar c: currentExpression)
     {
         if(c == ".")
         {
@@ -44,22 +70,22 @@ void CalculatorEngine::appendDecimalPoint()
         }
     }
     
-    displayText += ".";
+    currentExpression += ".";
 }
 
 void CalculatorEngine::checkIfZero()
 {
-    if(displayText.isEmpty())
+    if(currentExpression.isEmpty())
     {
-        displayText += "0";
+        currentExpression += "0";
     }
 }
 
 void CalculatorEngine::backspace()
 {
-    if (!displayText.isEmpty())
+    if (!currentExpression.isEmpty())
     {
-        displayText.chop(1);
+        currentExpression.chop(1);
     }
     
     checkIfZero();
@@ -68,12 +94,12 @@ void CalculatorEngine::backspace()
 
 void CalculatorEngine::clear()
 {
-    displayText.clear();
+    currentExpression.clear();
     checkIfZero();
 }
 
-QString CalculatorEngine::getDisplayText() const
+QString CalculatorEngine::getCurrentExpression() const
 {
-    return displayText;
+    return currentExpression;
 }
 

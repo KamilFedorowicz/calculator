@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) // start executing the code
     // display
     QTextEdit *display = new QTextEdit;
     display->setReadOnly(true);
-    display->setPlainText(engine.getDisplayText());
+    display->setPlainText(engine.getCurrentExpression());
     display->setFixedHeight(100);
     
     // Number buttons
@@ -127,7 +127,7 @@ int main(int argc, char *argv[]) // start executing the code
     // Refreshes the GUI from the calculator engine.
     auto refreshDisplay = [&engine, display]()
     {
-    display->setPlainText(engine.getDisplayText());
+    display->setPlainText(engine.getCurrentExpression());
     };
     
     QObject::connect(
@@ -316,6 +316,16 @@ int main(int argc, char *argv[]) // start executing the code
         [&engine, refreshDisplay]()
         {
             engine.addBracket(")");
+            refreshDisplay();
+        }
+    );
+    
+    QObject::connect(
+        btnEq,
+        &QPushButton::clicked,
+        [&engine, refreshDisplay]()
+        {
+            engine.evaluateExpression();
             refreshDisplay();
         }
     );
