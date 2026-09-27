@@ -16,11 +16,15 @@ public:
     bool isSign(const QString& sign);
     void addBracket(const QString& bracket);
     double evaluate(const std::string& expression_string);
+    void clearIfJustEvaluated();
 
     QString getCurrentExpression() const;
+    QString getCurrentErrorMessage();
     QString currentExpression{"0"};
+    QString errorMessage{"Correct expression"};
 
 private:
+    bool justEvaluated{false}; // keeps track whether the last button that was clicked was '=' (evaluate)
     
 };
 

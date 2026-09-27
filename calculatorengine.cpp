@@ -1,13 +1,21 @@
 #include "calculatorengine.h"
 #include "exprtk.hpp"
 
+void CalculatorEngine::clearIfJustEvaluated()
+{
+    if(justEvaluated == true)
+    {
+        clear();
+    }
+}
+
 void CalculatorEngine::evaluateExpression()
 {
     double result = evaluate(currentExpression.toStdString());
     QString currentInput = QString::number(result);
     currentExpression = currentInput;
+    justEvaluated = true;
 }
-
 
 double CalculatorEngine::evaluate(const std::string& expression_string)
 {
@@ -28,11 +36,14 @@ double CalculatorEngine::evaluate(const std::string& expression_string)
 
 void CalculatorEngine::appendNumber(const QString& num)
 {
+    clearIfJustEvaluated();
+    
     if(currentExpression == "0")
     {
         currentExpression.chop(1);
     }
     currentExpression += num;
+    justEvaluated = false;
 }
 
 bool CalculatorEngine::isSign(const QString& sign)
@@ -47,7 +58,9 @@ bool CalculatorEngine::isSign(const QString& sign)
 
 void CalculatorEngine::addBracket(const QString& bracket)
 {
+    clearIfJustEvaluated();
     currentExpression += bracket;
+    justEvaluated = false;
 }
 
 void CalculatorEngine::appendSign(const QString& sign)
@@ -58,10 +71,13 @@ void CalculatorEngine::appendSign(const QString& sign)
         currentExpression.chop(1);
     }
     currentExpression += sign;
+    justEvaluated = false;
 }
 
 void CalculatorEngine::appendDecimalPoint()
 {
+    clearIfJustEvaluated();
+    
     for(QChar c: currentExpression)
     {
         if(c == ".")
@@ -71,6 +87,7 @@ void CalculatorEngine::appendDecimalPoint()
     }
     
     currentExpression += ".";
+    justEvaluated = false;
 }
 
 void CalculatorEngine::checkIfZero()
@@ -89,6 +106,7 @@ void CalculatorEngine::backspace()
     }
     
     checkIfZero();
+    justEvaluated = false;
     
 }
 
@@ -96,10 +114,33 @@ void CalculatorEngine::clear()
 {
     currentExpression.clear();
     checkIfZero();
+    justEvaluated = false;
 }
 
 QString CalculatorEngine::getCurrentExpression() const
 {
     return currentExpression;
+}
+
+QString CalculatorEngine::getCurrentErrorMessage()
+{
+    std::string expression_string = currentExpression.toStdString();
+    
+    typedef exprtk::expression<double> expression_t;
+    typedef exprtk::parser<double> parser_t;
+
+    expression_t expression;
+    parser_t parser;
+
+    if (!parser.compile(expression_string, expression))
+    {
+        errorMessage = "Invalid expression!";
+    }
+    else
+    {
+        errorMessage = "Valid expression";
+    }
+
+    return errorMessage;
 }
 
