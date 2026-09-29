@@ -6,6 +6,24 @@
 #include <QPushButton>
 #include <QSizePolicy>
 
+void CalculatorWindow::keyPressEvent(QKeyEvent* event)
+{
+    qDebug() << "Key pressed: " << event->text();
+    QString text = event->text();
+    
+    if(text.length() == 1)
+    {
+        QChar c = text.front();
+        
+        if(c.isDigit())
+        {
+            engine.appendNumber(event->text());
+        }
+    }
+    
+    refreshDisplay();
+}
+
 CalculatorWindow::CalculatorWindow(QWidget *parent): QWidget(parent)
 {
     setWindowTitle("Calculator");

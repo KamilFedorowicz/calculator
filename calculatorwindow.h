@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "calculatorengine.h"
+#include <QKeyEvent>
 
 class QGridLayout;
 class QLineEdit;
@@ -53,6 +54,9 @@ private:
     const QString &text,
     int height = 80
     );
+    
+protected:
+    void keyPressEvent(QKeyEvent* event) override;
     
 };
 
