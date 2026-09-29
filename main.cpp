@@ -1,16 +1,23 @@
 #include <QApplication>
-
 #include "calculatorwindow.h"
+#include <QDebug>
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+    qDebug() << "Application started";
 
     CalculatorWindow window;
     window.show();
 
     return app.exec();
 }
+
+/*
+ ./Calculator.app/Contents/MacOS/Calculator
+ runs the executable so that the debug mode can be used
+ open Calculator.app - please launch this application, detatched from the terminal session
+ */
 
 /*
  QPushButton button2("Hello Qt4!", &window); - put this inside the window
