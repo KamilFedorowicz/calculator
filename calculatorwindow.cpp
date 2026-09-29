@@ -8,18 +8,51 @@
 
 void CalculatorWindow::keyPressEvent(QKeyEvent* event)
 {
-    qDebug() << "Key pressed: " << event->text();
+    qDebug() << "Text:" << event->text();
+    
     QString text = event->text();
+    bool isItSign = engine.isSign(text);
     
     if(text.length() == 1)
     {
         QChar c = text.front();
         
+        // handling nunmbers
         if(c.isDigit())
         {
-            engine.appendNumber(event->text());
+            qDebug() << "Number appended";
+            engine.appendNumber(text);
+        }
+        
+        // handling brackets
+        if(c == "(" || c == ")")
+        {
+            qDebug() << "Bracket appended";
+            engine.addBracket(text);
         }
     }
+    
+    if(isItSign)
+    {
+        // handling signs
+        qDebug() << "Sign appended";
+        engine.appendSign(text);
+    }
+    
+    if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
+    {
+        // handling enters
+        qDebug() << "Expression evaluated";
+        engine.evaluateExpression();
+    }
+    
+    if(event->key() == Qt::Key_Backspace || event->key() == Qt::Key_Delete)
+    {
+        // handling backspace
+        qDebug() << "Backspace pressed";
+        engine.backspace();
+    }
+    
     
     refreshDisplay();
 }
@@ -63,6 +96,12 @@ void CalculatorWindow::createWidgets()
     QFont displayErrorFont = displayError->font();
     displayErrorFont.setPointSize(14);
     displayError->setFont(displayErrorFont);
+    
+    display->setFocusPolicy(Qt::NoFocus); // this widget cannot become a keyboard target
+    displayError->setFocusPolicy(Qt::NoFocus);
+    
+    setFocusPolicy(Qt::StrongFocus); // this widget is allowed to receive keyboard focus
+    setFocus(); // give focus to this widget now
         
     btn0 = createButton("0");
     btn1 = createButton("1");

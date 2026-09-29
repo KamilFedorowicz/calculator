@@ -58,6 +58,20 @@ private:
 protected:
     void keyPressEvent(QKeyEvent* event) override;
     
+    /*
+     imagine the class
+     class QWidget
+     {
+     public:
+         virtual void keyPressEvent(QKeyEvent* event);
+     };
+     
+     CalculatorWindow ingerits from QWidget and provides own implementation of keyPressEvent
+     
+     */
+    
+    
+    
 };
 
 #endif
