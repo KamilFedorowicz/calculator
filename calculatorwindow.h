@@ -49,11 +49,16 @@ private:
     void createLayout();
     void connectButtons();
     void refreshDisplay();
+    void setButtonsStyle();
     
     QPushButton *createButton(
     const QString &text,
     int height = 80
     );
+    
+    QList<QPushButton *> numberButtons;
+    QList<QPushButton *> signButtons;
+    QList<QPushButton *> otherButtons;
     
 protected:
     void keyPressEvent(QKeyEvent* event) override;

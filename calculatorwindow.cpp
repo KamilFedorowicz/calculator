@@ -64,6 +64,7 @@ CalculatorWindow::CalculatorWindow(QWidget *parent): QWidget(parent)
     
     createWidgets();
     createLayout();
+    setButtonsStyle();
     connectButtons();
     refreshDisplay();
 }
@@ -83,7 +84,7 @@ void CalculatorWindow::createWidgets()
     display->setReadOnly(true);
     display->setFixedHeight(100);
     display->setAlignment(Qt::AlignRight);
-        
+    
     QFont displayFont = display->font();
     displayFont.setPointSize(28);
     display->setFont(displayFont);
@@ -102,7 +103,7 @@ void CalculatorWindow::createWidgets()
     
     setFocusPolicy(Qt::StrongFocus); // this widget is allowed to receive keyboard focus
     setFocus(); // give focus to this widget now
-        
+    
     btn0 = createButton("0");
     btn1 = createButton("1");
     btn2 = createButton("2");
@@ -113,18 +114,72 @@ void CalculatorWindow::createWidgets()
     btn7 = createButton("7");
     btn8 = createButton("8");
     btn9 = createButton("9");
-        
+    
+    numberButtons = {
+        btn0,
+        btn1,
+        btn2,
+        btn3,
+        btn4,
+        btn5,
+        btn6,
+        btn7,
+        btn8,
+        btn9
+    };
+    
     btnAdd = createButton("+");
     btnSub = createButton("-");
     btnMul = createButton("*");
     btnDiv = createButton("/");
     btnEq = createButton("=");
-        
+    
+    signButtons = {
+        btnAdd,
+        btnSub,
+        btnMul,
+        btnDiv,
+        btnEq
+    };
+    
     btnDot = createButton(".");
     btnDelete = createButton("DEL");
     btnClear = createButton("C");
     btnLeftBracket = createButton("(");
     btnRightBracket = createButton(")");
+    
+    otherButtons = {
+        btnDot,
+        btnDelete,
+        btnClear,
+        btnLeftBracket,
+        btnRightBracket
+    };
+
+}
+
+void CalculatorWindow::setButtonsStyle()
+{
+    for(QPushButton* button: numberButtons)
+    {
+        button->setStyleSheet("background-color: grey;" "border-radius: 15px;" "font-size: 20px");
+    }
+    
+    for(QPushButton* button: signButtons)
+    {
+        button->setStyleSheet(
+            "background-color: #4A90E2;"
+            "color: white;"
+            "border-radius: 15px;"
+            "font-size: 20px;"
+        );
+    }
+    
+    for(QPushButton* button: otherButtons)
+    {
+        button->setStyleSheet("background-color: yellow;" "border-radius: 15px;" "font-size: 20px");
+    }
+    
 }
 
 void CalculatorWindow::createLayout()
@@ -170,19 +225,6 @@ void CalculatorWindow::createLayout()
 
 void CalculatorWindow::connectButtons()
 {
-    const QList<QPushButton *> numberButtons = {
-        btn0,
-        btn1,
-        btn2,
-        btn3,
-        btn4,
-        btn5,
-        btn6,
-        btn7,
-        btn8,
-        btn9
-    };
-    
     for (QPushButton *button : numberButtons)
     {
         // when the button is clicked, execute this piece of...

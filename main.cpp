@@ -13,6 +13,8 @@ int main(int argc, char *argv[])
     return app.exec();
 }
 
+// tomorrow: hoover and pressed states
+
 /*
  ./Calculator.app/Contents/MacOS/Calculator
  runs the executable so that the debug mode can be used
