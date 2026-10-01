@@ -162,22 +162,62 @@ void CalculatorWindow::setButtonsStyle()
 {
     for(QPushButton* button: numberButtons)
     {
-        button->setStyleSheet("background-color: grey;" "border-radius: 15px;" "font-size: 20px");
+        button->setStyleSheet(
+            "QPushButton {"
+                "background-color: #5C6B7B;"
+                "color: white;"
+                "border-radius: 25px;"
+                "font-size: 20px;"
+            "}"
+
+            "QPushButton:hover {"
+                "background-color: #A2B6C7;"
+            "}"
+
+            "QPushButton:pressed {"
+                "background-color: #1A202C;"
+            "}"
+        );
     }
     
     for(QPushButton* button: signButtons)
     {
         button->setStyleSheet(
-            "background-color: #4A90E2;"
-            "color: white;"
-            "border-radius: 15px;"
-            "font-size: 20px;"
+            "QPushButton {"
+                "background-color: #4A90E2;"
+                "color: white;"
+                "border-radius: 25px;"
+                "font-size: 20px;"
+            "}"
+
+            "QPushButton:hover {"
+                "background-color: #6AA8EF;"
+            "}"
+
+            "QPushButton:pressed {"
+                "background-color: #3478D5;"
+            "}"
         );
     }
     
     for(QPushButton* button: otherButtons)
     {
-        button->setStyleSheet("background-color: yellow;" "border-radius: 15px;" "font-size: 20px");
+        button->setStyleSheet(
+            "QPushButton {"
+                "background-color: #FF8824;"
+                "color: white;"
+                "border-radius: 25px;"
+                "font-size: 20px;"
+            "}"
+
+            "QPushButton:hover {"
+                "background-color: #FFB066;"
+            "}"
+
+            "QPushButton:pressed {"
+                "background-color: #D65A00;"
+            "}"
+        );
     }
     
 }
