@@ -22,6 +22,7 @@ public:
     QString getCurrentErrorMessage();
     QString currentExpression{"0"};
     QString errorMessage{"Correct expression"};
+    QString historyExpression;
 
 private:
     bool justEvaluated{false}; // keeps track whether the last button that was clicked was '=' (evaluate)

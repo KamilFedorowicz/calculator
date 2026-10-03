@@ -82,7 +82,7 @@ void CalculatorWindow::createWidgets()
 {
     display = new QLineEdit(this);
     display->setReadOnly(true);
-    display->setFixedHeight(100);
+    display->setFixedHeight(40);
     display->setAlignment(Qt::AlignRight);
     
     QFont displayFont = display->font();
@@ -91,12 +91,18 @@ void CalculatorWindow::createWidgets()
     
     displayError = new QLineEdit(this);
     displayError->setReadOnly(true);
-    displayError->setFixedHeight(40);
+    displayError->setFixedHeight(30);
     displayError->setAlignment(Qt::AlignRight);
     
     QFont displayErrorFont = displayError->font();
     displayErrorFont.setPointSize(14);
     displayError->setFont(displayErrorFont);
+    
+    historyList = new QListWidget(this);
+    historyList->setFixedHeight(30);
+    QFont historyFont = historyList->font();
+    historyFont.setPointSize(14);
+    historyList->setFont(historyFont);
     
     display->setFocusPolicy(Qt::NoFocus); // this widget cannot become a keyboard target
     displayError->setFocusPolicy(Qt::NoFocus);
@@ -155,6 +161,7 @@ void CalculatorWindow::createWidgets()
         btnLeftBracket,
         btnRightBracket
     };
+    
 
 }
 
@@ -226,33 +233,38 @@ void CalculatorWindow::createLayout()
 {
     layout = new QGridLayout(this);
         
-    layout->addWidget(display, 0, 0, 1, 4);
-    layout->addWidget(displayError, 1, 0, 1, 4);
+    int dispR = 1;
+    
+    layout->addWidget(display, dispR, 0, 1, 4);
+    
+    layout->addWidget(displayError, dispR+1, 0, 1, 4);
+    
+    layout->addWidget(historyList, dispR-1, 0,1,4);
         
-    layout->addWidget(btnLeftBracket, 2, 0);
-    layout->addWidget(btnRightBracket, 2, 1);
-    layout->addWidget(btnClear, 2, 2);
-    layout->addWidget(btnDiv, 2, 3);
+    layout->addWidget(btnLeftBracket, dispR+2, 0);
+    layout->addWidget(btnRightBracket, dispR+2, 1);
+    layout->addWidget(btnClear, dispR+2, 2);
+    layout->addWidget(btnDiv, dispR+2, 3);
         
-    layout->addWidget(btn7, 3, 0);
-    layout->addWidget(btn8, 3, 1);
-    layout->addWidget(btn9, 3, 2);
-    layout->addWidget(btnMul, 3, 3);
+    layout->addWidget(btn7, dispR+3, 0);
+    layout->addWidget(btn8, dispR+3, 1);
+    layout->addWidget(btn9, dispR+3, 2);
+    layout->addWidget(btnMul, dispR+3, 3);
         
-    layout->addWidget(btn4, 4, 0);
-    layout->addWidget(btn5, 4, 1);
-    layout->addWidget(btn6, 4, 2);
-    layout->addWidget(btnSub, 4, 3);
+    layout->addWidget(btn4, dispR+4, 0);
+    layout->addWidget(btn5, dispR+4, 1);
+    layout->addWidget(btn6, dispR+4, 2);
+    layout->addWidget(btnSub, dispR+4, 3);
         
-    layout->addWidget(btn1, 5, 0);
-    layout->addWidget(btn2, 5, 1);
-    layout->addWidget(btn3, 5, 2);
-    layout->addWidget(btnAdd, 5, 3);
+    layout->addWidget(btn1, dispR+5, 0);
+    layout->addWidget(btn2, dispR+5, 1);
+    layout->addWidget(btn3, dispR+5, 2);
+    layout->addWidget(btnAdd, dispR+5, 3);
         
-    layout->addWidget(btnDelete, 6, 0);
-    layout->addWidget(btn0, 6, 1);
-    layout->addWidget(btnDot, 6, 2);
-    layout->addWidget(btnEq, 6, 3);
+    layout->addWidget(btnDelete, dispR+6, 0);
+    layout->addWidget(btn0, dispR+6, 1);
+    layout->addWidget(btnDot, dispR+6, 2);
+    layout->addWidget(btnEq, dispR+6, 3);
         
     layout->setSpacing(6);
     layout->setContentsMargins(10, 10, 10, 10);
@@ -274,6 +286,7 @@ void CalculatorWindow::connectButtons()
         {
             engine.appendNumber(button->text());
             refreshDisplay();
+            clearHistory();
         }
         );
     }
@@ -291,21 +304,24 @@ void CalculatorWindow::connectButtons()
         {
             engine.appendSign(button->text());
             refreshDisplay();
+            clearHistory();
         }
         );
     }
     
     connect(btnDot, &QPushButton::clicked, this, [this]()
-            {
+        {
             engine.appendDecimalPoint();
             refreshDisplay();
-            }
+            clearHistory();
+        }
             );
     
     connect(btnDelete, &QPushButton::clicked, this, [this]()
     {
         engine.backspace();
         refreshDisplay();
+        clearHistory();
     }
     );
     
@@ -313,6 +329,7 @@ void CalculatorWindow::connectButtons()
     {
         engine.clear();
         refreshDisplay();
+        clearHistory();
     }
     );
     
@@ -334,6 +351,7 @@ void CalculatorWindow::connectButtons()
     {
         engine.evaluateExpression();
         refreshDisplay();
+        refreshHistory();
     }
     );
 }
@@ -342,4 +360,20 @@ void CalculatorWindow::refreshDisplay()
 {
     display->setText(engine.getCurrentExpression());
     displayError->setText(engine.getCurrentErrorMessage());
+    
+    //historyList->addItem(engine.historyExpression);
+}
+
+void CalculatorWindow::refreshHistory()
+{
+    clearHistory();
+    QListWidgetItem* item = new QListWidgetItem(engine.historyExpression);
+    
+    item->setTextAlignment(Qt::AlignRight);
+    historyList->addItem(item);
+}
+
+void CalculatorWindow::clearHistory()
+{
+    historyList->clear();
 }

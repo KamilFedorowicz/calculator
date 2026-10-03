@@ -12,10 +12,15 @@ void CalculatorEngine::clearIfJustEvaluated()
 
 void CalculatorEngine::evaluateExpression()
 {
+    historyExpression = currentExpression;
     double result = evaluate(currentExpression.toStdString());
     QString currentInput = QString::number(result);
     currentExpression = currentInput;
     justEvaluated = true;
+    
+    historyExpression += "=";
+    historyExpression += currentExpression;
+    
 }
 
 double CalculatorEngine::evaluate(const std::string& expression_string)

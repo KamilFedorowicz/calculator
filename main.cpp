@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     return app.exec();
 }
 
-// tomorrow: hoover and pressed states
+// tomorrow: work on history expression. shouldnt be in refresh display.
 
 /*
  ./Calculator.app/Contents/MacOS/Calculator

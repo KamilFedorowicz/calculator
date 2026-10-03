@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "calculatorengine.h"
 #include <QKeyEvent>
+#include <QListWidget>
 
 class QGridLayout;
 class QLineEdit;
@@ -50,6 +51,8 @@ private:
     void connectButtons();
     void refreshDisplay();
     void setButtonsStyle();
+    void refreshHistory();
+    void clearHistory();
     
     QPushButton *createButton(
     const QString &text,
@@ -59,6 +62,8 @@ private:
     QList<QPushButton *> numberButtons;
     QList<QPushButton *> signButtons;
     QList<QPushButton *> otherButtons;
+    
+    QListWidget* historyList;
     
 protected:
     void keyPressEvent(QKeyEvent* event) override;
