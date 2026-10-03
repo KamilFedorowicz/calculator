@@ -22,6 +22,7 @@ void CalculatorWindow::keyPressEvent(QKeyEvent* event)
         {
             qDebug() << "Number appended";
             engine.appendNumber(text);
+            clearHistory();
         }
         
         // handling brackets
@@ -37,6 +38,7 @@ void CalculatorWindow::keyPressEvent(QKeyEvent* event)
         // handling signs
         qDebug() << "Sign appended";
         engine.appendSign(text);
+        clearHistory();
     }
     
     if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
@@ -44,6 +46,7 @@ void CalculatorWindow::keyPressEvent(QKeyEvent* event)
         // handling enters
         qDebug() << "Expression evaluated";
         engine.evaluateExpression();
+        refreshHistory();
     }
     
     if(event->key() == Qt::Key_Backspace || event->key() == Qt::Key_Delete)
