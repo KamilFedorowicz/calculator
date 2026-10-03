@@ -5,6 +5,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QSizePolicy>
+#include <QSettings>
 
 void CalculatorWindow::keyPressEvent(QKeyEvent* event)
 {
@@ -69,6 +70,9 @@ CalculatorWindow::CalculatorWindow(QWidget *parent): QWidget(parent)
     createLayout();
     setButtonsStyle();
     connectButtons();
+    
+    loadSettings();
+    
     refreshDisplay();
 }
 
@@ -380,3 +384,54 @@ void CalculatorWindow::clearHistory()
 {
     historyList->clear();
 }
+
+void CalculatorWindow::saveSettings()
+{
+    // organisation, application
+    QSettings settings("Kamil", "Calculator");
+
+    // creates a setting called currentExpression, and assignes value of engine.getCurrentExpression()
+    settings.setValue(
+        "currentExpression",
+        engine.getCurrentExpression()
+    );
+
+    settings.setValue(
+        "historyExpression",
+        engine.historyExpression
+    );
+}
+
+void CalculatorWindow::loadSettings()
+{
+    QSettings settings("Kamil", "Calculator");
+
+    // find setting called currentExpression, return stored value
+    QString expression =
+        settings.value(
+            "currentExpression",
+            "0"
+        ).toString();
+    
+    engine.setCurrentExpression(expression);
+
+    QString history =
+        settings.value(
+            "historyExpression",
+            ""
+        ).toString();
+    
+    engine.historyExpression = history;
+    //historyList->addItem(history);
+    
+    refreshDisplay();
+    refreshHistory();
+}
+
+void CalculatorWindow::closeEvent(QCloseEvent* event)
+{
+    saveSettings();
+    QWidget::closeEvent(event);
+}
+
+

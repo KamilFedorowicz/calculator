@@ -23,10 +23,11 @@ public:
     QString currentExpression{"0"};
     QString errorMessage{"Correct expression"};
     QString historyExpression;
+    void setCurrentExpression(const QString& expression);
 
 private:
     bool justEvaluated{false}; // keeps track whether the last button that was clicked was '=' (evaluate)
-    
+
 };
 
 #endif

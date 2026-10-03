@@ -54,6 +54,9 @@ private:
     void refreshHistory();
     void clearHistory();
     
+    void saveSettings();
+    void loadSettings();
+    
     QPushButton *createButton(
     const QString &text,
     int height = 80
@@ -67,6 +70,7 @@ private:
     
 protected:
     void keyPressEvent(QKeyEvent* event) override;
+    void closeEvent(QCloseEvent* event) override;
     
     /*
      imagine the class

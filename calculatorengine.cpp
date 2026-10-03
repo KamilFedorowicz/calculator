@@ -152,3 +152,8 @@ QString CalculatorEngine::getCurrentErrorMessage()
     return errorMessage;
 }
 
+void CalculatorEngine::setCurrentExpression(
+    const QString& expression)
+{
+    currentExpression = expression;
+}
