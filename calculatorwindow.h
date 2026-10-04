@@ -5,6 +5,9 @@
 #include "calculatorengine.h"
 #include <QKeyEvent>
 #include <QListWidget>
+#include <QMenuBar>
+#include <QMenu>
+#include <QAction>
 
 class QGridLayout;
 class QLineEdit;
@@ -60,6 +63,7 @@ private:
     void setTheme();
     void applyLightTheme();
     void applyDarkTheme();
+    void toggleTheme();
     
     void styleButtons(
         const QList<QPushButton*>& buttons,
@@ -78,6 +82,14 @@ private:
     QList<QPushButton *> otherButtons;
     
     QListWidget* historyList;
+    
+    QMenuBar* menuBar;
+    QMenu* viewMenu;
+    QAction* toggleThemeAction;
+    QString theme = "dark";
+    QAction* testEval;
+    
+    void createMenuBar();
     
 protected:
     void keyPressEvent(QKeyEvent* event) override;

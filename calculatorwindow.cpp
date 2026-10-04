@@ -7,6 +7,40 @@
 #include <QSizePolicy>
 #include <QSettings>
 
+CalculatorWindow::CalculatorWindow(QWidget *parent): QWidget(parent)
+{
+    setWindowTitle("Calculator");
+    setFixedSize(400, 600);
+    
+    createWidgets();
+    createMenuBar();
+    createLayout();
+    
+    loadSettings(); // load settings has to be after widgets are created because it uses refresh dispaly for expample, which cannot be a null pointer
+    setTheme();
+    
+    connectButtons();
+    
+    refreshDisplay();
+    refreshHistory();
+     
+}
+
+void CalculatorWindow::toggleTheme()
+{
+    if(theme == "dark")
+    {
+        theme = "light";
+    }
+    else if(theme == "light")
+    {
+        theme = "dark";
+    }
+    
+    setTheme();
+    qDebug() << "Theme:" << theme;
+}
+
 void CalculatorWindow::keyPressEvent(QKeyEvent* event)
 {
     qDebug() << "Text:" << event->text();
@@ -57,21 +91,6 @@ void CalculatorWindow::keyPressEvent(QKeyEvent* event)
         engine.backspace();
     }
     
-    
-    refreshDisplay();
-}
-
-CalculatorWindow::CalculatorWindow(QWidget *parent): QWidget(parent)
-{
-    setWindowTitle("Calculator");
-    setFixedSize(400, 600);
-    
-    createWidgets();
-    createLayout();
-    setTheme();
-    connectButtons();
-    
-    loadSettings();
     
     refreshDisplay();
 }
@@ -214,7 +233,6 @@ void CalculatorWindow::styleButtons(
 
 void CalculatorWindow::setTheme()
 {
-    QString theme = "dark";
     
     if(theme == "dark")
     {
@@ -244,6 +262,23 @@ void CalculatorWindow::setTheme()
         styleButtons(numberButtons, "#5C6B7B", "#A2B6C7","#1A202C");
         styleButtons(signButtons, "#4A90E2", "#6AA8EF", "#3478D5");
         styleButtons(otherButtons, "#FF8824", "#FFB066", "#D65A00");
+        display->setStyleSheet(
+            "background-color: white;"
+            "color: black;"
+            "border-radius: 15px;"
+        );
+        
+        displayError->setStyleSheet(
+            "background-color: white;"
+            "color: black;"
+            "border-radius: 10px;"
+        );
+        
+        historyList->setStyleSheet(
+            "background-color: white;"
+            "color: black;"
+            "border-radius: 10px;"
+        );
     }
 }
 
@@ -415,10 +450,9 @@ void CalculatorWindow::saveSettings()
         engine.getCurrentExpression()
     );
 
-    settings.setValue(
-        "historyExpression",
-        engine.historyExpression
-    );
+    settings.setValue("historyExpression", engine.historyExpression);
+    
+    settings.setValue("theme", theme);
     
     qDebug() << settings.fileName();
 }
@@ -442,6 +476,9 @@ void CalculatorWindow::loadSettings()
             ""
         ).toString();
     
+    theme = settings.value("theme", "light").toString();
+    setTheme();
+    
     engine.historyExpression = history;
     //historyList->addItem(history);
     
@@ -455,4 +492,36 @@ void CalculatorWindow::closeEvent(QCloseEvent* event)
     QWidget::closeEvent(event);
 }
 
-
+void CalculatorWindow::createMenuBar()
+{
+    menuBar = new QMenuBar(this);
+    viewMenu = menuBar->addMenu("View");
+    
+    toggleThemeAction = new QAction("Toggle theme", this);
+    viewMenu->addAction(toggleThemeAction);
+    connect(
+        toggleThemeAction,
+        &QAction::triggered,
+        this,
+        [this]()
+        {
+            toggleTheme();
+        }
+    );
+    
+    // this is just for learning purposes. it activates evaluate button from the view menu. rather not necessary and can be easily deleted
+    testEval = new QAction("Evaluate");
+    viewMenu->addAction(testEval);
+    connect(
+        testEval,
+        &QAction::triggered,
+        this,
+        [this]()
+        {
+            engine.evaluateExpression();
+            refreshDisplay();
+            refreshHistory();
+        }
+    );
+    
+}
