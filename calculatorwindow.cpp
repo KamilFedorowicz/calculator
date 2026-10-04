@@ -68,7 +68,7 @@ CalculatorWindow::CalculatorWindow(QWidget *parent): QWidget(parent)
     
     createWidgets();
     createLayout();
-    setButtonsStyle();
+    setTheme();
     connectButtons();
     
     loadSettings();
@@ -172,67 +172,86 @@ void CalculatorWindow::createWidgets()
 
 }
 
-void CalculatorWindow::setButtonsStyle()
+void CalculatorWindow::applyLightTheme()
 {
-    for(QPushButton* button: numberButtons)
-    {
-        button->setStyleSheet(
-            "QPushButton {"
-                "background-color: #5C6B7B;"
-                "color: white;"
-                "border-radius: 25px;"
-                "font-size: 20px;"
-            "}"
-
-            "QPushButton:hover {"
-                "background-color: #A2B6C7;"
-            "}"
-
-            "QPushButton:pressed {"
-                "background-color: #1A202C;"
-            "}"
-        );
-    }
     
-    for(QPushButton* button: signButtons)
-    {
-        button->setStyleSheet(
-            "QPushButton {"
-                "background-color: #4A90E2;"
-                "color: white;"
-                "border-radius: 25px;"
-                "font-size: 20px;"
-            "}"
+}
 
-            "QPushButton:hover {"
-                "background-color: #6AA8EF;"
-            "}"
-
-            "QPushButton:pressed {"
-                "background-color: #3478D5;"
-            "}"
-        );
-    }
+void CalculatorWindow::applyDarkTheme()
+{
     
-    for(QPushButton* button: otherButtons)
+}
+
+void CalculatorWindow::styleButtons(
+    const QList<QPushButton*>& buttons,
+    const QString& normalColour,
+    const QString& hoverColour,
+    const QString& pressedColour)
+{
+    for(QPushButton* button : buttons)
     {
         button->setStyleSheet(
-            "QPushButton {"
-                "background-color: #FF8824;"
-                "color: white;"
-                "border-radius: 25px;"
-                "font-size: 20px;"
-            "}"
-
-            "QPushButton:hover {"
-                "background-color: #FFB066;"
-            "}"
-
-            "QPushButton:pressed {"
-                "background-color: #D65A00;"
-            "}"
+            QString(
+                "QPushButton {"
+                    "background-color: %1;"
+                    "color: white;"
+                    "border-radius: 25px;"
+                    "font-size: 20px;"
+                "}"
+                "QPushButton:hover {"
+                    "background-color: %2;"
+                "}"
+                "QPushButton:pressed {"
+                    "background-color: %3;"
+                "}"
+            )
+            .arg(normalColour)
+            .arg(hoverColour)
+            .arg(pressedColour)
         );
     }
+}
+
+void CalculatorWindow::setTheme()
+{
+    QString theme = "dark";
+    
+    if(theme == "dark")
+    {
+        styleButtons(numberButtons, "#3C444C", "#59636B","#252B31");
+        styleButtons(signButtons, "#2563EB", "#3B82F6", "#1D4ED8");
+        styleButtons(otherButtons, "#C2410C", "#EA580C", "#9A3412");
+        display->setStyleSheet(
+            "background-color: black;"
+            "color: white;"
+            "border-radius: 15px;"
+        );
+        
+        displayError->setStyleSheet(
+            "background-color: black;"
+            "color: white;"
+            "border-radius: 10px;"
+        );
+        
+        historyList->setStyleSheet(
+            "background-color: black;"
+            "color: white;"
+            "border-radius: 10px;"
+        );
+    }
+    else if(theme == "light")
+    {
+        styleButtons(numberButtons, "#5C6B7B", "#A2B6C7","#1A202C");
+        styleButtons(signButtons, "#4A90E2", "#6AA8EF", "#3478D5");
+        styleButtons(otherButtons, "#FF8824", "#FFB066", "#D65A00");
+    }
+}
+
+void CalculatorWindow::setLightTheme()
+{
+    styleButtons(numberButtons, "#5C6B7B", "#A2B6C7","#1A202C");
+    styleButtons(signButtons, "#4A90E2", "#6AA8EF", "#3478D5");
+    styleButtons(otherButtons, "#FF8824", "#FFB066", "#D65A00");
     
 }
 
@@ -400,6 +419,8 @@ void CalculatorWindow::saveSettings()
         "historyExpression",
         engine.historyExpression
     );
+    
+    qDebug() << settings.fileName();
 }
 
 void CalculatorWindow::loadSettings()

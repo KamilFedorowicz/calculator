@@ -50,12 +50,23 @@ private:
     void createLayout();
     void connectButtons();
     void refreshDisplay();
-    void setButtonsStyle();
+    void setLightTheme();
     void refreshHistory();
     void clearHistory();
     
     void saveSettings();
     void loadSettings();
+    
+    void setTheme();
+    void applyLightTheme();
+    void applyDarkTheme();
+    
+    void styleButtons(
+        const QList<QPushButton*>& buttons,
+        const QString& normalColour,
+        const QString& hoverColour,
+        const QString& pressedColour
+    );
     
     QPushButton *createButton(
     const QString &text,
