@@ -1,4 +1,5 @@
 #include "calculatorwindow.h"
+#include "aboutdialog.h"
 
 #include <QFont>
 #include <QGridLayout>
@@ -14,6 +15,7 @@ CalculatorWindow::CalculatorWindow(QWidget *parent): QWidget(parent)
     
     createWidgets();
     createMenuBar();
+    //createHelpMenuBar();
     createLayout();
     
     loadSettings(); // load settings has to be after widgets are created because it uses refresh dispaly for expample, which cannot be a null pointer
@@ -524,4 +526,23 @@ void CalculatorWindow::createMenuBar()
         }
     );
     
+}
+
+void CalculatorWindow::createHelpMenuBar()
+{
+    helpMenu = menuBar->addMenu("Help");
+    aboutAction = new QAction("About", this);
+
+    helpMenu->addAction(aboutAction);
+    
+    connect(
+        aboutAction,
+        &QAction::triggered,
+        this,
+        [this]()
+        {
+            AboutDialog dialog(this);
+            dialog.exec();
+        }
+    );
 }

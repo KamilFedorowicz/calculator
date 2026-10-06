@@ -42,7 +42,6 @@ double CalculatorEngine::evaluate(const std::string& expression_string)
 
 void CalculatorEngine::appendNumber(const QString& num)
 {
-    qDebug() << "Appending number";
     
     clearIfJustEvaluated();
     

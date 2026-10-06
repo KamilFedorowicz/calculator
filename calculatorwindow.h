@@ -88,8 +88,11 @@ private:
     QAction* toggleThemeAction;
     QString theme = "dark";
     QAction* testEval;
-    
     void createMenuBar();
+    
+    QMenu* helpMenu;
+    QAction* aboutAction;
+    void createHelpMenuBar();
     
 protected:
     void keyPressEvent(QKeyEvent* event) override;
