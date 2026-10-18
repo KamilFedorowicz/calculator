@@ -15,6 +15,7 @@ CalculatorWindow::CalculatorWindow(QWidget *parent): QWidget(parent)
     
     createWidgets();
     createMenuBar();
+    createEditMenu();
     //createHelpMenuBar();
     createLayout();
     
@@ -417,6 +418,32 @@ void CalculatorWindow::connectButtons()
         refreshHistory();
     }
     );
+    
+    connect(
+        undoAction,
+        &QAction::triggered,
+        this,
+        [this]()
+        {
+            engine.undo();
+
+            refreshDisplay();
+            refreshHistory();
+        }
+    );
+
+    connect(
+        redoAction,
+        &QAction::triggered,
+        this,
+        [this]()
+        {
+            engine.redo();
+
+            refreshDisplay();
+            refreshHistory();
+        }
+    );
 }
 
 void CalculatorWindow::refreshDisplay()
@@ -545,4 +572,15 @@ void CalculatorWindow::createHelpMenuBar()
             dialog.exec();
         }
     );
+}
+
+void CalculatorWindow::createEditMenu()
+{
+    editMenu = menuBar->addMenu("Edit");
+
+    undoAction = new QAction("Undo", this);
+    redoAction = new QAction("Redo", this);
+
+    editMenu->addAction(undoAction);
+    editMenu->addAction(redoAction);
 }

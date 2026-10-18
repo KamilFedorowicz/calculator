@@ -94,6 +94,12 @@ private:
     QAction* aboutAction;
     void createHelpMenuBar();
     
+    QMenu *editMenu;
+    QAction *undoAction;
+    QAction *redoAction;
+    void createEditMenu();
+    
+    
 protected:
     void keyPressEvent(QKeyEvent* event) override;
     void closeEvent(QCloseEvent* event) override;

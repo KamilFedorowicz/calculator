@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     return app.exec();
 }
 
-// tomorrow: work on history expression. shouldnt be in refresh display.
+// next: continue with undo/redo states
 
 /*
  ./Calculator.app/Contents/MacOS/Calculator

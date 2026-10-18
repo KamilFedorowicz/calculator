@@ -24,6 +24,23 @@ public:
     QString errorMessage{"Correct expression"};
     QString historyExpression;
     void setCurrentExpression(const QString& expression);
+    
+    struct CalculatorState
+    {
+        QString currentExpression;
+        QString historyExpression;
+        bool justEvaluated = false;
+    };
+    
+    // we dont need stach because push_back and pop_back acts as a stack
+    std::vector<CalculatorState> undoStack;
+    std::vector<CalculatorState> redoStack;
+    
+    CalculatorState getState() const;
+    void saveState();
+    void undo();
+    void redo();
+    void restoreState(const CalculatorState& state);
 
 private:
     bool justEvaluated{false}; // keeps track whether the last button that was clicked was '=' (evaluate)
